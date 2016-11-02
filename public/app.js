@@ -11,6 +11,8 @@ bookmarks.appOnReady = function() {
 
 bookmarks.router = function(hash) {
   var routes = {
+    '': bookmarks.landingView,
+    '#': bookmarks.landingView,
     '#index': bookmarks.indexView,
     '#show': bookmarks.showView
   };
@@ -18,9 +20,24 @@ bookmarks.router = function(hash) {
   var viewFn = routes[hash];
 
   if(viewFn) {
+    bookmarks.triggerEvent('removingView', []);
     $('.view-container').empty().append(viewFn);
   }
 }
 
-bookmarks.indexView = function() {}
+bookmarks.template = function(name) {
+  return $('.templates .' + name).clone();
+}
+
+bookmarks.triggerEvent = function(name, args) {
+  $('.view-container>*').trigger(name, args);
+}
+
+bookmarks.landingView = function() {
+  return bookmarks.template('landing-view');
+}
+
+bookmarks.indexView = function() {
+  return bookmarks.template('index-view');
+}
 bookmarks.showView = function() {}
