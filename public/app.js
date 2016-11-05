@@ -41,3 +41,7 @@ bookmarks.indexView = function() {
   return bookmarks.template('index-view');
 }
 bookmarks.showView = function() {}
+
+function googleSignIn() {
+  console.log(arguments);
+}
