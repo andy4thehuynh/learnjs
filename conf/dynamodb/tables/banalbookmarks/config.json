@@ -1,8 +1,8 @@
 {
   "AttributeDefinitions": [
     {
-      "AttributeName": "problemId", 
-      "AttributeType": "N"
+      "AttributeName": "link", 
+      "AttributeType": "S"
     }, 
     {
       "AttributeName": "userId", 
@@ -16,7 +16,7 @@
     }, 
     {
       "KeyType": "RANGE", 
-      "AttributeName": "problemId"
+      "AttributeName": "link"
     }
   ], 
   "ProvisionedThroughput": {
