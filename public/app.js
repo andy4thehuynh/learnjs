@@ -29,24 +29,36 @@ bookmarks.router = function(hash) {
   }
 }
 
+
 //////////////////////////////////////////////////
 //
-// Util
+// Database Related
 //
 //////////////////////////////////////////////////
-bookmarks.template = function(name) {
-  return $('.templates .' + name).clone();
+
+bookmarks.sendDbRequest = function(req, retry) {
+  var promise = new $.Deferred();
+  req.on('error', function(error) {
+    if (error.code == "CredentialsError") {
+      bookmarks.identity.then(function(identity) {
+        return identity.refresh().then(function() {
+          return retry();
+        }, function() {
+          promise.reject(resp);
+        });
+      });
+    } else {
+      promise.reject(error);
+    }
+  });
+  req.on('success', function(resp) {
+    promise.resolve(resp.data);
+  });
+
+  req.send();
+  return promise;
 }
 
-bookmarks.triggerEvent = function(name, args) {
-  $('.view-container>*').trigger(name, args);
-}
-
-bookmarks.addProfileLink = function(profile) {
-  var link = bookmarks.template('profile-link');
-  link.find('a').text(profile.email);
-  $('.signin-bar').prepend(link);
-}
 
 //////////////////////////////////////////////////
 //
@@ -72,6 +84,28 @@ bookmarks.profileView = function() {
 }
 
 bookmarks.showView = function() {}
+
+
+//////////////////////////////////////////////////
+//
+// Util
+//
+//////////////////////////////////////////////////
+
+bookmarks.template = function(name) {
+  return $('.templates .' + name).clone();
+}
+
+bookmarks.triggerEvent = function(name, args) {
+  $('.view-container>*').trigger(name, args);
+}
+
+bookmarks.addProfileLink = function(profile) {
+  var link = bookmarks.template('profile-link');
+  link.find('a').text(profile.email);
+  $('.signin-bar').prepend(link);
+}
+
 
 //////////////////////////////////////////////////
 //
