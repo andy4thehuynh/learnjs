@@ -45,14 +45,29 @@ bookmarks.saveLink = function(link) {
         userId: identity.id,
         link: link
       }
-      // },
-      // "ConditionExpression": "attribute_not_exists(userId) and attribute_not_exists(link)"
     };
     return bookmarks.sendDbRequest(db.put(item), function() {
       return bookmarks.saveLink(link);
     });
   });
 };
+
+bookmarks.deleteLink = function(link) {
+  return bookmarks.identity.then(function(identity) {
+    var db = new AWS.DynamoDB.DocumentClient();
+    var item = {
+      TableName: 'banalbookmarks',
+      Key: {
+        userId: identity.id,
+        link: link
+      }
+    };
+
+    return bookmarks.sendDbRequest(db.delete(item), function() {
+      return bookmarks.deleteLink(link);
+    });
+  });
+}
 
 bookmarks.fetchLinks = function() {
   return bookmarks.identity.then(function(identity) {
@@ -124,14 +139,17 @@ bookmarks.indexView = function() {
   view.find('.submit-link').click(checkSubmittedLink);
 
   var list = view.find('.links-list');
-
   bookmarks.fetchLinks().then(function(data) {
     if (data.Items) {
       var items = data.Items;
 
       for (var i = 0; i < items.length; i++) {
         var link = items[i]["link"];
-        var listItem = $(document.createElement('li')).text(link);
+        var deleteButton = $("<button>",
+                             { text: "Delete",
+                               type: "button",
+                               click: function () { bookmarks.deleteLink(link); } });
+        var listItem = $("<li>").text(link).append(deleteButton);
         list.append(listItem);
       }
     } else {
