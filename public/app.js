@@ -45,6 +45,8 @@ bookmarks.saveLink = function(link) {
         userId: identity.id,
         link: link
       }
+      // },
+      // "ConditionExpression": "attribute_not_exists(userId) and attribute_not_exists(link)"
     };
     return bookmarks.sendDbRequest(db.put(item), function() {
       return bookmarks.saveLink(link);
@@ -119,11 +121,22 @@ bookmarks.indexView = function() {
       console.log('No link submitted!');
     }
   }
-
   view.find('.submit-link').click(checkSubmittedLink);
+
+  var list = view.find('.links-list');
+
   bookmarks.fetchLinks().then(function(data) {
-    view.find('.links').text(data.Items);
-    console.log(data.Items);
+    if (data.Items) {
+      var items = data.Items;
+
+      for (var i = 0; i < items.length; i++) {
+        var link = items[i]["link"];
+        var listItem = $(document.createElement('li')).text(link);
+        list.append(listItem);
+      }
+    } else {
+      console.log("No items");
+    }
   });
   return view;
 }
