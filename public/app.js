@@ -138,20 +138,25 @@ bookmarks.indexView = function() {
   }
   view.find('.submit-link').click(checkSubmittedLink);
 
-  var list = view.find('.links-list');
   bookmarks.fetchLinks().then(function(data) {
     if (data.Items) {
       var items = data.Items;
+      var table = $("#links-table");
 
-      for (var i = 0; i < items.length; i++) {
-        var link = items[i]["link"];
-        var deleteButton = $("<button>",
-                             { text: "Delete",
-                               type: "button",
-                               click: function () { bookmarks.deleteLink(link); } });
-        var listItem = $("<li>").text(link).append(deleteButton);
-        list.append(listItem);
-      }
+      $.each(items, function(rowIndex, data) {
+        var row = $("<tr/>");
+        var link = data["link"];
+        var deleteBtn = $("<button>",
+                         { text: "Delete",
+                           type: "button",
+                           class: "button-danger btn-delete",
+                           click: function () { bookmarks.deleteLink(link); } })
+
+        row.append($("<td/>").text(link));
+        row.append($("<td/>").append(deleteBtn));
+
+        table.append(row);
+      });
     } else {
       console.log("No items");
     }

@@ -57,7 +57,14 @@
         display: inline-block;
         padding-top: 12px;
       }
+      .button-danger {
+        background-color: red;
+        border: none;
+        color: #FFFFFF;
+      }
+      .btn-delete { float: right; }
     </style>
+
   </head>
   <body>
     <div class='markup'>
@@ -86,7 +93,14 @@
           <input class="new-link" type="text" />
           <button class="button-primary submit-link">Submit Link</button>
 
-          <ul class="links-list"></ul>
+          <table class="u-full-width" id="links-table">
+            <thead>
+              <th>Link</th>
+              <th></th>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
         </div>
 
         <div class="profile-view">
