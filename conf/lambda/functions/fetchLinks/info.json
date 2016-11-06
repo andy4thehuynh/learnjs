@@ -1,0 +1,14 @@
+{
+    "CodeSha256": "6QS62nwzOBkDOi2+Sg4yhLF50zgGRk8cAE3PSF/di1M=", 
+    "FunctionName": "fetchLinks", 
+    "CodeSize": 789908, 
+    "MemorySize": 128, 
+    "FunctionArn": "arn:aws:lambda:us-east-1:763901062827:function:fetchLinks", 
+    "Version": "$LATEST", 
+    "Role": "arn:aws:iam::763901062827:role/banal-bookmarks_lambda_exec", 
+    "Timeout": 5, 
+    "LastModified": "2016-11-07T00:02:08.936+0000", 
+    "Handler": "index.fetchLinks", 
+    "Runtime": "nodejs", 
+    "Description": ""
+}

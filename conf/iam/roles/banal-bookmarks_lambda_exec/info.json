@@ -1,0 +1,22 @@
+{
+    "Role": {
+        "AssumeRolePolicyDocument": {
+            "Version": "2012-10-17", 
+            "Statement": [
+                {
+                    "Action": "sts:AssumeRole", 
+                    "Principal": {
+                        "Service": "lambda.amazonaws.com"
+                    }, 
+                    "Effect": "Allow", 
+                    "Sid": ""
+                }
+            ]
+        }, 
+        "RoleId": "AROAJGK24O4Y7QHAZSXJ2", 
+        "CreateDate": "2016-11-06T08:18:30.910Z", 
+        "RoleName": "banal-bookmarks_lambda_exec", 
+        "Path": "/", 
+        "Arn": "arn:aws:iam::763901062827:role/banal-bookmarks_lambda_exec"
+    }
+}

@@ -71,18 +71,16 @@ bookmarks.deleteLink = function(link) {
 
 bookmarks.fetchLinks = function() {
   return bookmarks.identity.then(function(identity) {
-    var db = new AWS.DynamoDB.DocumentClient();
-    var item = {
-      TableName: 'banalbookmarks',
-      ProjectionExpression: "link",
-      KeyConditionExpression: "userId = :userId",
-      ExpressionAttributeValues: {
-        ":userId": identity.id
-      }
+    var lambda = new AWS.Lambda();
+    var params = {
+      FunctionName: "fetchLinks",
+      Payload: JSON.stringify({"identity": identity, "id_token": bookmarks.id_token}),
+      InvocationType: "RequestResponse"
     };
-    return bookmarks.sendDbRequest(db.query(item), function() {
-      return bookmarks.fetchLinks();
-    });
+
+    return bookmarks.sendDbRequest(lambda.invoke(params), function() {
+      return bookmarks.fetchlinks;
+    })
   });
 }
 
@@ -139,9 +137,11 @@ bookmarks.indexView = function() {
   view.find('.submit-link').click(checkSubmittedLink);
 
   bookmarks.fetchLinks().then(function(data) {
-    if (data.Items) {
+    var data = JSON.parse(data.Payload);
+    var table = $("#links-table");
+
+    if (data) {
       var items = data.Items;
-      var table = $("#links-table");
 
       $.each(items, function(rowIndex, data) {
         var row = $("<tr/>");
@@ -158,7 +158,6 @@ bookmarks.indexView = function() {
         table.append(row);
       });
     } else {
-      console.log("No items");
     }
   });
   return view;
@@ -205,7 +204,9 @@ bookmarks.addProfileLink = function(profile) {
 bookmarks.identity = new $.Deferred();
 
 function googleSignIn(googleUser) {
-  var id_token = googleUser.getAuthResponse().id_token;
+  var id_token       = googleUser.getAuthResponse().id_token;
+  bookmarks.id_token = id_token;
+
   AWS.config.update({
     region: 'us-east-1',
     credentials: new AWS.CognitoIdentityCredentials({
@@ -220,8 +221,10 @@ function googleSignIn(googleUser) {
     return gapi.auth2.getAuthInstance().signIn({
       prompt: 'login'
     }).then(function(userUpdate) {
-      var creds = AWS.config.credentials;
-      var newToken = userUpdate.getAuthResponse().id_token;
+      var creds          = AWS.config.credentials;
+      var newToken       = userUpdate.getAuthResponse().id_token;
+      bookmarks.id_token = newToken;
+
       creds.params.Logins['accounts.google.com'] = newToken;
 
       return bookmarks.awsRefresh();
