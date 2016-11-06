@@ -36,6 +36,40 @@ bookmarks.router = function(hash) {
 //
 //////////////////////////////////////////////////
 
+bookmarks.saveLink = function(link) {
+  return bookmarks.identity.then(function(identity) {
+    var db = new AWS.DynamoDB.DocumentClient();
+    var item = {
+      TableName: 'banalbookmarks',
+      Item: {
+        userId: identity.id,
+        link: link
+      }
+    };
+    return bookmarks.sendDbRequest(db.put(item), function() {
+      return bookmarks.saveLink(link);
+    });
+  });
+};
+
+bookmarks.fetchLinks = function() {
+  return bookmarks.identity.then(function(identity) {
+    var db = new AWS.DynamoDB.DocumentClient();
+    var item = {
+      TableName: 'banalbookmarks',
+      ProjectionExpression: "link",
+      KeyConditionExpression: "userId = :userId",
+      ExpressionAttributeValues: {
+        ":userId": identity.id
+      }
+    };
+    return bookmarks.sendDbRequest(db.query(item), function() {
+      return bookmarks.fetchLinks();
+    });
+  });
+}
+
+
 bookmarks.sendDbRequest = function(req, retry) {
   var promise = new $.Deferred();
   req.on('error', function(error) {
@@ -57,7 +91,7 @@ bookmarks.sendDbRequest = function(req, retry) {
 
   req.send();
   return promise;
-}
+};
 
 
 //////////////////////////////////////////////////
@@ -71,7 +105,27 @@ bookmarks.landingView = function() {
 }
 
 bookmarks.indexView = function() {
-  return bookmarks.template('index-view');
+  var view = bookmarks.template('index-view');
+
+  function submitLink() {
+    return view.find('.new-link').val();
+  }
+
+  function checkSubmittedLink() {
+    if (submitLink()) {
+      var link = view.find('.new-link');
+      bookmarks.saveLink(link.val());
+    } else {
+      console.log('No link submitted!');
+    }
+  }
+
+  view.find('.submit-link').click(checkSubmittedLink);
+  bookmarks.fetchLinks().then(function(data) {
+    view.find('.links').text(data.Items);
+    console.log(data.Items);
+  });
+  return view;
 }
 
 bookmarks.profileView = function() {
