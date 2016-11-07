@@ -43,10 +43,7 @@
       .hover-links a { text-decoration: none;  }
       .hover-links a:hover { text-decoration: underline;  }
 
-      .nav-container {
-        padding-left: 40px;
-        background: #2196F3;
-      }
+      .nav-container { background: #2196F3; }
       .nav-container a { color: white; }
       .text-lg { font-size: 32px; }
       .navbar-padding {
@@ -59,21 +56,30 @@
         color: #FFFFFF;
       }
       .btn-delete { float: right; }
+      .profile {
+        display: block;
+        margin-bottom: 15px;
+      }
+      #links-table { margin-top: 30px; }
+
     </style>
 
   </head>
   <body>
     <div class='markup'>
       <div class="nav-container no-select fixed-top u-full-width">
-        <ul class="inline-list hover-links nav-list six columns">
-          <li><a class="text-lg" href="#index">Bookmarks</a></li>
-        </ul>
-        <div class="four columns signin-bar">
-          <span class="navbar-padding u-pull-right">
-            <span class="g-signin2" align="right" data-onsuccess="googleSignIn"></span>
-          </span>
+        <div class="container">
+          <ul class="inline-list hover-links nav-list six columns">
+            <li><a class="bookmarks-link text-lg" href="#index">Bookmarks</a></li>
+          </ul>
+          <div class="six columns signin-bar">
+            <span class="navbar-padding u-pull-right">
+              <span class="g-signin2" align="right" data-onsuccess="googleSignIn"></span>
+            </span>
+          </div>
         </div>
       </div>
+
       <div class="view-container container">
       </div>
 

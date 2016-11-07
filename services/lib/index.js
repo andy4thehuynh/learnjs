@@ -8,7 +8,6 @@ var config = {
 };
 
 exports.dynamodb = new AWS.DynamoDB.DocumentClient();
-console.log("hits the lambda service");
 
 exports.fetchLinks = function(json, context) {  
   var item = {
