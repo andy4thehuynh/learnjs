@@ -129,7 +129,9 @@ bookmarks.indexView = function() {
   function checkSubmittedLink() {
     if (submitLink()) {
       var link = view.find('.new-link');
+
       bookmarks.saveLink(link.val());
+      bookmarks.router('#index');
     } else {
       console.log('No link submitted!');
     }
@@ -150,7 +152,7 @@ bookmarks.indexView = function() {
                          { text: "Delete",
                            type: "button",
                            class: "button-danger btn-delete",
-                           click: function () { bookmarks.deleteLink(link); } })
+                           click: function () { bookmarks.deleteLink(link); bookmarks.router('#index'); } })
 
         row.append($("<td/>").text(link));
         row.append($("<td/>").append(deleteBtn));
