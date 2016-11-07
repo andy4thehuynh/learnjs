@@ -239,13 +239,8 @@ function googleSignIn(googleUser) {
       email: googleUser.getBasicProfile().getEmail(),
       refresh: refresh
     });
-  });
-}
 
-function googleSignOut() {
-  var auth2 = gapi.auth2.getAuthInstance();
-  auth2.signOut().then(function () {
-    console.log('User signed out.');
+    bookmarks.router('#index');
   });
 }
 
@@ -260,4 +255,12 @@ bookmarks.awsRefresh = function() {
   });
 
   return deferred.promise();
+}
+
+function googleSignOut() {
+  var auth2 = gapi.auth2.getAuthInstance();
+  auth2.signOut().then(function () {
+    bookmarks.router('#');
+    console.log('User signed out.');
+  });
 }
