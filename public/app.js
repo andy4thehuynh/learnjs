@@ -240,6 +240,13 @@ function googleSignIn(googleUser) {
   });
 }
 
+function googleSignOut() {
+  var auth2 = gapi.auth2.getAuthInstance();
+  auth2.signOut().then(function () {
+    console.log('User signed out.');
+  });
+}
+
 bookmarks.awsRefresh = function() {
   var deferred = $.Deferred();
   AWS.config.credentials.refresh(function(err) {
