@@ -53,10 +53,6 @@
         padding-top: 7px;
         display: inline-block;
       }
-      .profile-link {
-        display: inline-block;
-        padding-top: 12px;
-      }
       .button-danger {
         background-color: red;
         border: none;
@@ -74,8 +70,7 @@
         </ul>
         <div class="four columns signin-bar">
           <span class="navbar-padding u-pull-right">
-            <span class="g-signin2" data-onsuccess="googleSignIn"></span>
-            <a href="#" onclick="googleSignOut();">Sign out</a>
+            <span class="g-signin2" align="right" data-onsuccess="googleSignIn"></span>
           </span>
         </div>
       </div>
@@ -90,9 +85,16 @@
         </div>
 
         <div class="index-view">
-          Add a link:
-          <input class="new-link" type="text" />
-          <button class="button-primary submit-link">Submit Link</button>
+          <div class="row">
+            <div class="add-link-container six columns">
+              <div>
+                <label for="add-a-link">Add a link:</label>
+                <input class="u-full-width new-link" id="add-a-link" type="text" />
+              </div>
+
+              <button class="button-primary submit-link">Submit Link</button>
+            </div>
+          </div>
 
           <table class="u-full-width" id="links-table">
             <thead>
@@ -109,8 +111,13 @@
           <div class="email"></div>
         </div>
 
-        <div class="profile-link navbar-padding-lg">
-          <a href="#profile"></a>
+        <div class="profile-link six columns">
+          <div class="u-pull-right">
+            <div>
+              <a href="#profile" class="profile"></a>
+            </div>
+            <a class="button signout-link u-pull-right" href="#" onclick="googleSignOut();">Sign out</a>
+          </div>
         </div>
       </div>
     </div>

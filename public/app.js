@@ -191,8 +191,8 @@ bookmarks.triggerEvent = function(name, args) {
 
 bookmarks.addProfileLink = function(profile) {
   var link = bookmarks.template('profile-link');
-  link.find('a').text(profile.email);
-  $('.signin-bar').prepend(link);
+  link.find('.profile').text(profile.email);
+  $('.add-link-container').after(link);
 }
 
 
